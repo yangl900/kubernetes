@@ -107,7 +107,7 @@ func isSuccessHTTPResponse(resp *http.Response) bool {
 	}
 
 	// HTTP 2xx suggests a successful response
-	if 199 < resp.StatusCode && resp.StatusCode < 300 {
+	if 199 < resp.StatusCode && resp.StatusCode != 202 && resp.StatusCode < 300 {
 		return true
 	}
 
@@ -132,6 +132,11 @@ func shouldRetryHTTPRequest(resp *http.Response, err error) bool {
 
 		// HTTP 4xx (except 412) or 5xx suggests we should retry.
 		if 399 < resp.StatusCode && resp.StatusCode < 600 {
+			return true
+		}
+
+		// HTTP 202 (Accepted) suggests we should retry until it complete.
+		if resp.StatusCode == 202 {
 			return true
 		}
 	}

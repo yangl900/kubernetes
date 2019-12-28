@@ -210,6 +210,10 @@ func TestShouldRetryHTTPRequest(t *testing.T) {
 			code:     399,
 			expected: false,
 		},
+		{
+			code:     202,
+			expected: true,
+		},
 	}
 	for _, test := range tests {
 		resp := &http.Response{
@@ -238,6 +242,10 @@ func TestIsSuccessResponse(t *testing.T) {
 		{
 			code:     http.StatusOK,
 			expected: true,
+		},
+		{
+			code:     http.StatusAccepted,
+			expected: false,
 		},
 	}
 
